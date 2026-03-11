@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "HWStarterRepo"
+rootProject.name = "android2-app-fkb5cz"
 include(":app")
