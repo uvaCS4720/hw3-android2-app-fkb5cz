@@ -19,32 +19,17 @@ import edu.nd.pmcburne.hwapp.one.ui.theme.HWStarterRepoTheme
 
 
 class MainActivity : ComponentActivity() {
+    private val viewModel : BasketballViewModel by viewModels {
+        BasketballViewModel.Factory((application as BasketballApp).repository)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             HWStarterRepoTheme {
-                BasketballScoresScreen(viewModel =
-
-                    )
-                }
+                BasketballScoresScreen(viewModel = viewModel)
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    HWStarterRepoTheme {
-        Greeting("Android")
     }
 }
