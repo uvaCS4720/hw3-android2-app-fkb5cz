@@ -42,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import edu.nd.pmcburne.hwapp.one.data.local.ScoreEntity
 import edu.nd.pmcburne.hwapp.one.data.model.Gender
@@ -318,3 +319,58 @@ private fun formatPeriodAndClock(period: String, clock: String): String {
     return cleanedPeriod + cleanedClock
 }
 
+
+@Preview(showBackground = true)
+@Composable
+fun BasketballScoresPreview() {
+    val fakeGames = listOf(
+        ScoreEntity(
+            gameId = "1",
+            gender = "men",
+            scoreDate = "2026-02-17",
+            homeName = "Virginia",
+            awayName = "Duke",
+            homeScore = "72",
+            awayScore = "68",
+            homeWinner = true,
+            awayWinner = false,
+            gameState = "final",
+            startTime = "7:00 PM",
+            startTimeEpoch = 0,
+            currentPeriod = "2nd Half",
+            contestClock = "0:00",
+            finalMessage = "Final"
+        ),
+        ScoreEntity(
+            gameId = "2",
+            gender = "men",
+            scoreDate = "2026-02-17",
+            homeName = "UNC",
+            awayName = "NC State",
+            homeScore = "44",
+            awayScore = "41",
+            homeWinner = false,
+            awayWinner = false,
+            gameState = "live",
+            startTime = "6:30 PM",
+            startTimeEpoch = 0,
+            currentPeriod = "2nd Half",
+            contestClock = "13:47",
+            finalMessage = ""
+        )
+    )
+
+    val previewState = BasketballUiState(
+        selectedDate = LocalDate.now(),
+        selectedGender = Gender.MEN,
+        games = fakeGames,
+        isLoading = false
+    )
+
+    ScoresContent(
+        uiState = previewState,
+        onGenderSelected = {},
+        onDateSelected = {},
+        onRefresh = {}
+    )
+}
