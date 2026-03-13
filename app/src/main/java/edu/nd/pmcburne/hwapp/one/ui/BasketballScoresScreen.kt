@@ -50,6 +50,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BasketballScoresScreen (viewModel: BasketballViewModel){
     val uiState by viewModel.uiState.collectAsState()
@@ -289,30 +290,31 @@ private fun GameCard(game: ScoreEntity) {
             }
         }
     }
-    @Composable
-    private fun TeamColumn(
-        name: String,
-        score: String,
-        winner: Boolean,
-        alignEnd: Boolean = false
-    ) {
-        Column(horizontalAlignment =if (alignEnd) Alignment.End else Alignment.Start) {
-            Text(
-                text = name,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = if (winner) FontWeight.Bold else FontWeight.Normal
-            )
-            Text(
-                text = if (score.isBlank()) "-" else score,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = if (winner) FontWeight.Bold else FontWeightMedium
-            )
-        }
-    }
-
-    private fun formatPeriodAndClock(period: String, clock: String): String {
-        val cleanedPeriod = if (period.isBlank()) "In Progress" else period
-        val cleanedClock = if (clock.isBlank() || clock == "0:00") "" else "- $clock"
-        return cleanedPeriod + cleanedClock
+}
+@Composable
+private fun TeamColumn(
+    name: String,
+    score: String,
+    winner: Boolean,
+    alignEnd: Boolean = false
+) {
+    Column(horizontalAlignment =if (alignEnd) Alignment.End else Alignment.Start) {
+        Text(
+            text = name,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = if (winner) FontWeight.Bold else FontWeight.Normal
+        )
+        Text(
+            text = if (score.isBlank()) "-" else score,
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = if (winner) FontWeight.Bold else FontWeight.Medium
+        )
     }
 }
+
+private fun formatPeriodAndClock(period: String, clock: String): String {
+    val cleanedPeriod = if (period.isBlank()) "In Progress" else period
+    val cleanedClock = if (clock.isBlank() || clock == "0:00") "" else "- $clock"
+    return cleanedPeriod + cleanedClock
+}
+
