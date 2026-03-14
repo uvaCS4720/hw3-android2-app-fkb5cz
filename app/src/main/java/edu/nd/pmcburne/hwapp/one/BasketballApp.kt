@@ -10,6 +10,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class BasketballApp : Application() {
+
+    // initialize room db with lazy
      val database by lazy {
         Room.databaseBuilder(
             applicationContext,
@@ -18,6 +20,7 @@ class BasketballApp : Application() {
         ).build()
     }
 
+    // connect to retrofit api service
     private val api: ScoreApiService by lazy {
         Retrofit.Builder()
             .baseUrl("https://ncaa-api.henrygd.me/")
@@ -26,6 +29,7 @@ class BasketballApp : Application() {
             .create(ScoreApiService::class.java)
     }
 
+    // repository to get scores from api and store updated in room db
     val repository by lazy {
         ScoreRepository(
             dao = database.scoreDao(),

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Refresh
@@ -27,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -57,17 +59,26 @@ fun BasketballScoresScreen (viewModel: BasketballViewModel){
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
+    // show error message for transparency
     LaunchedEffect(uiState.errorMessage) {
         uiState.errorMessage?.let { snackbarHostState.showSnackbar(it)}
     }
 
     Scaffold(
+        // top bar with bball scores title
         topBar = {
             TopAppBar(
-                title = {Text("Basketball Scores")},
+                title = {
+                    Text(
+                        text = "Basketball Scores",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
                 actions = {
+                    // refresh button at top
                     IconButton(onClick = viewModel::refresh) {
-                        Icon (Icons.Default.Refresh, contentDescription = "Refresh")
+                        Icon (Icons.Default.Refresh, contentDescription = "Refresh scores")
                     }
                 }
             )
@@ -85,7 +96,7 @@ fun BasketballScoresScreen (viewModel: BasketballViewModel){
                 onDateSelected = viewModel::setDate,
                 onRefresh = viewModel::refresh
             )
-
+            // loading indicator for fetching remote data
             if (uiState.isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier
@@ -106,6 +117,8 @@ private fun ScoresContent(
     onRefresh: () -> Unit
 ) {
     var showDatePicker by remember { mutableStateOf(false)}
+
+    // initialize date picker to current date
     var selectedMillis by remember {
         mutableLongStateOf(
             uiState.selectedDate
@@ -122,15 +135,18 @@ private fun ScoresContent(
     ) {
         Text(
             text = "Choose date and division",
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold
         )
 
         Spacer(modifier = Modifier.size(12.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
+            // toggle between men and women's
             FilterChip(
                 selected = uiState.selectedGender == Gender.MEN,
                 onClick = {onGenderSelected(Gender.MEN)},
@@ -142,6 +158,8 @@ private fun ScoresContent(
                 label = {Text("Women")}
             )
             Spacer(modifier=Modifier.weight(1f))
+
+            // use date picker to change scoreboard date
             AssistChip(
                 onClick = {showDatePicker=true},
                 label = {
@@ -155,15 +173,25 @@ private fun ScoresContent(
 
         Spacer(modifier = Modifier.size(10.dp))
 
+        // use saved offline results
         if (uiState.showingOfflineData) {
-            Text(
-                text = "Showing saved offline results",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
+            Surface(
+                shape = RoundedCornerShape(12.dp),
+                color = MaterialTheme.colorScheme.primary.copy(alpha=0.10f),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "Showing saved offline results",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp)
+                )
+            }
+
             Spacer(modifier = Modifier.size(8.dp))
         }
 
+        // state for when there aren't any available games
         if (uiState.games.isEmpty() && !uiState.isLoading) {
             Text(
                 text = "No games on this date.",

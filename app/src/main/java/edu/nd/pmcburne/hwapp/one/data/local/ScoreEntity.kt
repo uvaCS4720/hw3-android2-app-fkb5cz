@@ -16,10 +16,8 @@ data class ScoreEntity (
 
     val homeScore: String,
     val awayScore: String,
-
     val homeWinner: Boolean,
     val awayWinner: Boolean,
-
     val gameState: String,
     val startTime: String,
     val startTimeEpoch: Long,

@@ -15,14 +15,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import edu.nd.pmcburne.hwapp.one.ui.theme.HWStarterRepoTheme
 import edu.nd.pmcburne.hwapp.one.ui.BasketballScoresScreen
 import edu.nd.pmcburne.hwapp.one.ui.BasketballViewModel
-import edu.nd.pmcburne.hwapp.one.ui.theme.HWStarterRepoTheme
 
 
 class MainActivity : ComponentActivity() {
+    // viewmodel instance to survive config changes
     private val viewModel : BasketballViewModel by viewModels {
         BasketballViewModel.Factory((application as BasketballApp).repository)
     }
 
+    // initialize ui
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
